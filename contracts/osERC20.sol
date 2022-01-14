@@ -21,4 +21,14 @@ contract osERC20 {
     function decimal() public pure returns (uint8){
         return 18;
     }
+
+    /*TODO: 
+        - mint new token for addr
+            - set (+) totalSupply
+            - set (+) balances (mapping)
+        - burn token form addr
+            - set (-) totalSupply addr
+            - set (-) balances
+        - tranfert token
+    */
 }
