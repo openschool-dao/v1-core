@@ -1,14 +1,19 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+// hello world
+
 contract osERC20 {
     mapping(address => uint256) private _balances;
-    uint256 private _totalSupply;
+
     address private _owner;
+
+    uint256 private _totalSupply;
+
     string private _name;
     string private _symbol;
 
-    event Transfer(address indexed from, address indexed to, uint256 amount);
+    event Transfer(address indexed from, address indexed to, uint256 value);
 
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
@@ -28,50 +33,58 @@ contract osERC20 {
         return 18;
     }
 
-    function mint(address account, uint256 amount) external {
-        require(msg.sender == _owner, "Mint restricted to owner");
-        _balances[account] += amount;
-        _totalSupply += amount;
-        emit Transfer(address(0), account, amount);
-    }
-
-    function burn(address account, uint256 amount) external {
-        require(_balances[account] >= amount, "Address balance is too low");
-        require(msg.sender == account, "Must be the token owner");
-        _balances[account] -= amount;
-        _totalSupply -= amount;
-        emit Transfer(account, address(0), amount);
-    }
-
-    function balanceOf(address account) public view returns (uint256) {
-        return _balances[account];
-    }
-
     function totalSupply() public view returns (uint256) {
         return _totalSupply;
     }
-
-    function transfer(address to, uint256 amount) external returns (bool) {
-        _transfer(msg.sender, to, amount);
-        return true;
+    /**
+     * @dev must be internal so nobody can mint new token !
+     * TODO: Remove require statement if internal function
+     */
+    function mint(address account, uint256 amount) internal {
+        require(_owner == msg.sender);
+        _totalSupply += amount;
+        _balances[account] += amount;
+        emit Transfer(address(0), account, amount);
     }
 
-    function transferFrom(address from, address to, uint256 amount) external returns (bool) {
-        _transfer(from, to, amount);
-        return true;
-    }
-
-    function _transfer(address sender, address recipient, uint256 amount) private {
-        require( _balances[sender] >= amount, "Address sender balance is too low");
-        // TODO: add balances over flow condition
-        _balances[sender] -= amount;
-        _balances[recipient] += amount;
-        emit Transfer(sender, recipient, amount);
+    /**
+     * @dev remove amount from account balance and substract from totalsupply
+     * TODO: require that account balance is >= amount
+     */
+    function burn(address account, uint256 amount) internal {
     }
 
     /*TODO:
-        - tranfert token
-            - under flow 
-            - over flow
+        - mint new token to addr
+            - set (+) totalSupply
+            - set (+) balances (mapping)
+        - burn token from addr
+            - set (-) totalSupply addr
+            - set (-) balances
+        - tranfer token with 2 patterns:
+            - private version(admin)
+            - public version(decentralized)
     */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
