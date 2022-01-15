@@ -2,12 +2,18 @@
 pragma solidity ^0.8.0;
 
 contract osERC20 {
+    mapping(address => uint256) private _balances;
+    uint256 private _totalSupply;
+    address private _owner;
     string private _name;
     string private _symbol;
-    
+
+    event Transfer(address indexed from, address indexed to, uint256 amount);
+
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
+        _owner = msg.sender;
     }
 
     function name() public view returns (string memory) {
@@ -22,13 +28,30 @@ contract osERC20 {
         return 18;
     }
 
-    /*TODO: 
-        - mint new token for addr
-            - set (+) totalSupply
-            - set (+) balances (mapping)
-        - burn token form addr
-            - set (-) totalSupply addr
-            - set (-) balances
+    function mint(address account, uint256 amount) external {
+        require(msg.sender == _owner, "Mint restricted to owner");
+        _balances[account] += amount;
+        _totalSupply += amount;
+        emit Transfer(address(0), account, amount);
+    }
+
+    function burn(address account, uint256 amount) external {
+        require(_balances[account] >= amount, "Address balance is too low");
+        require(msg.sender == account, "Must be the token owner");
+        _balances[account] -= amount;
+        _totalSupply -= amount;
+        emit Transfer(account, address(0), amount);
+    }
+
+    function balanceOf(address account) public view returns (uint256) {
+        return _balances[account];
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _totalSupply;
+    }
+
+    /*TODO:
         - tranfert token
     */
 }
