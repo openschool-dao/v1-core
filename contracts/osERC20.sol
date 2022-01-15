@@ -51,7 +51,27 @@ contract osERC20 {
         return _totalSupply;
     }
 
+    function transfer(address to, uint256 amount) external returns (bool) {
+        _transfer(msg.sender, to, amount);
+        return true;
+    }
+
+    function transferFrom(address from, address to, uint256 amount) external returns (bool) {
+        _transfer(from, to, amount);
+        return true;
+    }
+
+    function _transfer(address sender, address recipient, uint256 amount) private {
+        require( _balances[sender] >= amount, "Address sender balance is too low");
+        // TODO: add balances over flow condition
+        _balances[sender] -= amount;
+        _balances[recipient] += amount;
+        emit Transfer(sender, recipient, amount);
+    }
+
     /*TODO:
         - tranfert token
+            - under flow 
+            - over flow
     */
 }
