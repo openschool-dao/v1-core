@@ -13,3 +13,9 @@ npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
 ```
+
+## TODO
+
+- ERC721 (NFT) or ERC1155 (multi NFT & tokens) for each track
+- Voting system to allow NFT holder to vote on attribution for new applicant
+- Complete test for every Contracts and functions

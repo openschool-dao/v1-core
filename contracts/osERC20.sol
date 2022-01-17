@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 contract osERC20 {
     mapping(address => uint256) private _balances;
     uint256 private _totalSupply;
@@ -37,7 +39,7 @@ contract osERC20 {
 
     function burn(address account, uint256 amount) external {
         require(_balances[account] >= amount, "Address balance is too low");
-        require(msg.sender == account, "Must be the token owner");
+        require(msg.sender == account, "Burn restricted to token holder");
         _balances[account] -= amount;
         _totalSupply -= amount;
         emit Transfer(account, address(0), amount);
@@ -71,7 +73,7 @@ contract osERC20 {
 
     /*TODO:
         - tranfert token
-            - under flow 
+            - under flow
             - over flow
     */
 }
