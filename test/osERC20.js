@@ -82,14 +82,14 @@ describe("osERC20", () => {
             await setMintTx.wait();
         });
 
-        it('Only the Holder is allowed to burn', async () => {
+        it("Only the Holder is allowed to burn", async () => {
             osToken = osToken.connect(owner);
 
             await expect(osToken.burn(addr1.address, 10))
                     .to.be.reverted;
         });
 
-        it('Holder must have enough token to burn', async () => {
+        it("Holder must have enough token to burn", async () => {
             osToken = osToken.connect(addr2);
 
             await expect(osToken.burn(addr2.address, 10))
@@ -106,4 +106,49 @@ describe("osERC20", () => {
             expect(await osToken.totalSupply()).to.equal(0);
         });
     });
+
+    describe("Transfer token", () => {
+        beforeEach(async () => {
+            Token = await ethers.getContractFactory("osERC20");
+            osToken = await Token.deploy("OpenSchool Token", "OST");
+
+            [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+
+            const setMintTx = await osToken.mint(addr1.address, 100);
+            await setMintTx.wait();
+        });
+
+        it("Should be transferable from sender to account", async () => {
+            osToken = osToken.connect(addr1);
+            const setTokenTx = await osToken.transfer(addr2.address, 10);
+            await setTokenTx.wait();
+
+            expect(await osToken.balanceOf(addr1.address)).to.equal(90);
+            expect(await osToken.balanceOf(addr2.address)).to.equal(10);
+            expect(await osToken.totalSupply()).to.equal(100);
+        });
+
+        it("Amount must be limited to sender supply", async () => {
+            osToken = osToken.connect(addr1);
+            await expect(osToken.transfer(addr2.address, 110))
+                    .to.be.reverted
+        });
+    });
+
+    describe("Allowance of token", () => {
+        before(async () => {
+            Token = await ethers.getContractFactory("osERC20");
+            osToken = await Token.deploy("OpenSchool Token", "OST");
+
+            [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+
+            const setMintTx = await osToken.mint(addr1.address, 100);
+            await setMintTx.wait();
+        });
+
+        it("Tokens should be allowable", async () => {
+            osToken = osToken.connect(addr1);
+
+        });
+    })
 });
