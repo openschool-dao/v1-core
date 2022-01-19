@@ -1,16 +1,19 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 contract osERC20 {
     mapping(address => uint256) private _balances;
+    mapping(address => mapping(address => uint256)) private _allowances;
+
     uint256 private _totalSupply;
+
     address private _owner;
+
     string private _name;
     string private _symbol;
 
-    event Transfer(address indexed from, address indexed to, uint256 amount);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     constructor(string memory name_, string memory symbol_) {
         _name = name_;
@@ -30,18 +33,25 @@ contract osERC20 {
         return 18;
     }
 
-    function mint(address account, uint256 amount) external {
+    function mint(address account, uint256 amount) public {
         require(msg.sender == _owner, "Mint restricted to owner");
+
         _balances[account] += amount;
         _totalSupply += amount;
+
         emit Transfer(address(0), account, amount);
     }
 
-    function burn(address account, uint256 amount) external {
-        require(_balances[account] >= amount, "Address balance is too low");
+    function burn(address account, uint256 amount) public {
+        uint256 accountBalance = _balances[account];
+
+        require(accountBalance >= amount, "Address balance is too low");
         require(msg.sender == account, "Burn restricted to token holder");
-        _balances[account] -= amount;
+
+        // TODO: handle underflow calculation
+        _balances[account] = accountBalance - amount;
         _totalSupply -= amount;
+
         emit Transfer(account, address(0), amount);
     }
 
@@ -53,27 +63,45 @@ contract osERC20 {
         return _totalSupply;
     }
 
-    function transfer(address to, uint256 amount) external returns (bool) {
-        _transfer(msg.sender, to, amount);
+    function transfer(address recipient, uint256 amount) public returns (bool) {
+        _transfer(msg.sender, recipient, amount);
         return true;
     }
 
-    function transferFrom(address from, address to, uint256 amount) external returns (bool) {
-        _transfer(from, to, amount);
+    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+        _transfer(sender, recipient, amount);
+
+        uint256 currentAllowance = _allowances[sender][msg.sender];
+        require(currentAllowance >= amount, "Transfer amount exceeds allowance");
+
+        // TODO: handle underflow calculation
+        _approve(sender, msg.sender, currentAllowance - amount);
+
         return true;
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) private {
-        require( _balances[sender] >= amount, "Address sender balance is too low");
-        // TODO: add balances over flow condition
-        _balances[sender] -= amount;
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return _allowances[owner][spender];
+    }
+
+    function approve(address spender, uint256 amount) public returns (bool) {
+        _approve(msg.sender, spender, amount);
+        return true;
+    }
+
+    function _approve(address owner, address spender, uint256 amount) internal {
+        _allowances[owner][spender] = amount;
+
+        emit Approval(owner, spender, amount);
+    }
+
+    function _transfer(address sender, address recipient, uint256 amount) internal {
+        uint256 senderBalance = _balances[sender];
+        require(senderBalance >= amount, "Address sender balance is too low");
+        // TODO: check underflow calculation
+        _balances[sender] = senderBalance - amount;
         _balances[recipient] += amount;
+
         emit Transfer(sender, recipient, amount);
     }
-
-    /*TODO:
-        - tranfert token
-            - under flow
-            - over flow
-    */
 }
