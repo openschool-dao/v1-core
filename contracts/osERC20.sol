@@ -1,7 +1,17 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract osERC20 {
+
+import './interfaces/IOsERC20.sol';
+import 'hardhat/console.sol';
+
+/**
+ * @dev we should restrict mint and burn with Ownable library
+ * we should look if ownable can work with Governor contracts.
+ * Mint and burn will be called by the voting contract named Governor.
+ */
+
+contract OsERC20 is IOsERC20 {
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
 
@@ -25,28 +35,27 @@ contract osERC20 {
         return _name;
     }
 
-    function symbol() public view returns (string memory){
+    function symbol() public view returns (string memory) {
         return _symbol;
     }
 
-    function decimal() public pure returns (uint8){
+    function decimal() public pure returns (uint8) {
         return 18;
     }
 
     function mint(address account, uint256 amount) public {
-        require(msg.sender == _owner, "Mint restricted to owner");
-
+        require(msg.sender == _owner, 'Mint restricted to owner');
         _balances[account] += amount;
         _totalSupply += amount;
 
         emit Transfer(address(0), account, amount);
     }
 
-    function burn(address account, uint256 amount) public {
+    function burn(address account, uint256 amount) external {
         uint256 accountBalance = _balances[account];
 
-        require(accountBalance >= amount, "Address balance is too low");
-        require(msg.sender == account, "Burn restricted to token holder");
+        require(accountBalance >= amount, 'Address balance is too low');
+        require(msg.sender == account, 'Burn restricted to token holder');
 
         // TODO: handle underflow calculation
         _balances[account] = accountBalance - amount;
@@ -95,7 +104,7 @@ contract osERC20 {
         emit Approval(owner, spender, amount);
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) internal {
+    function _transfer(address sender, address recipient, uint256 amount) private {
         uint256 senderBalance = _balances[sender];
         require(senderBalance >= amount, "Address sender balance is too low");
         // TODO: check underflow calculation
