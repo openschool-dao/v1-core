@@ -1,12 +1,21 @@
-const main = async () => {
-  const osERC20ContractFactory = await hre.ethers.getContractFactory('osERC20');
-  const osERC20Contract = await osERC20ContractFactory.deploy(
-    'OpenSchool Token',
-    'OST'
-  );
+// TODO: deployment must be coded. It does not work currently.
 
-  await osERC20Contract.deployed();
-  console.log("Contract deployed to:", osERC20Contract.address);
+const main = async () => {
+    // const erc20ContractFactory = await hre.ethers.getContractFactory('OsERC20');
+    // const erc20Contract = await erc20ContractFactory.deploy(
+    //     'OpenSchool Token',
+    //     'OST'
+    // );
+
+    // await erc20Contract.deployed();
+    // console.log("ERC20 Contract deployed to:", erc20Contract.address);
+
+    const skillContractFactory = await hre.ethers.getContractFactory('OsSkill');
+    const skillContract = await skillContractFactory.deploy();
+
+    await skillContract.deployed();
+    console.log("Skill Contract deployed to:", skillContract.address);
+
 };
 
 const runMain = async () => {

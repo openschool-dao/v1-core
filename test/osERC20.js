@@ -9,7 +9,7 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("osERC20", () => {
+describe("OsERC20", () => {
 
     let Token;
     let osToken;
@@ -21,7 +21,7 @@ describe("osERC20", () => {
 
     describe("Deployment", function () {
         before(async () => {
-            Token = await ethers.getContractFactory("osERC20");
+            Token = await ethers.getContractFactory("OsERC20");
             osToken = await Token.deploy("OpenSchool Token", "OST");
 
             [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
@@ -73,7 +73,7 @@ describe("osERC20", () => {
 
     describe("Burning token", () => {
         beforeEach(async () => {
-            Token = await ethers.getContractFactory("osERC20");
+            Token = await ethers.getContractFactory("OsERC20");
             osToken = await Token.deploy("OpenSchool Token", "OST");
 
             [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
@@ -109,7 +109,7 @@ describe("osERC20", () => {
 
     describe("Transfer token", () => {
         beforeEach(async () => {
-            Token = await ethers.getContractFactory("osERC20");
+            Token = await ethers.getContractFactory("OsERC20");
             osToken = await Token.deploy("OpenSchool Token", "OST");
 
             [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
@@ -137,7 +137,7 @@ describe("osERC20", () => {
 
     describe("Allowance of token", () => {
         before(async () => {
-            Token = await ethers.getContractFactory("osERC20");
+            Token = await ethers.getContractFactory("OsERC20");
             osToken = await Token.deploy("OpenSchool Token", "OST");
 
             [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
