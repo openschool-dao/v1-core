@@ -21,7 +21,6 @@ describe('OsERC20', () => {
     before(async () => {
       Token = await ethers.getContractFactory('OsERC20')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
-
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
     })
 
@@ -71,7 +70,6 @@ describe('OsERC20', () => {
     beforeEach(async () => {
       Token = await ethers.getContractFactory('OsERC20')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
-
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 
       const setMintTx = await osToken.mint(addr1.address, 10)
@@ -105,7 +103,6 @@ describe('OsERC20', () => {
     beforeEach(async () => {
       Token = await ethers.getContractFactory('OsERC20')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
-
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 
       const setMintTx = await osToken.mint(addr1.address, 100)
@@ -132,7 +129,6 @@ describe('OsERC20', () => {
     before(async () => {
       Token = await ethers.getContractFactory('OsERC20')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
-
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 
       const setMintTx = await osToken.mint(addr1.address, 100)
