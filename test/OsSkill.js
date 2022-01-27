@@ -16,7 +16,6 @@ describe('OsSkill', () => {
         ['Solidity', 'Javascript', 'Typescript'],
         ['https://i.imgur.com/HyyK9bq.png', 'https://i.imgur.com/DnvDSV1.png', 'https://i.imgur.com/PrBtG6g.png'],
       )
-
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
     })
 
