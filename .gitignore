@@ -1,9 +1,13 @@
-node_modules
-.env
+# directories
+artifacts
+cache
 coverage
-coverage.json
+node_modules
 typechain
 
-#Hardhat files
-cache
-artifacts
+# files
+*.env
+*.log
+coverage.json
+yarn-debug.log*
+yarn-error.log*

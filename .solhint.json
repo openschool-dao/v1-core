@@ -1,0 +1,14 @@
+{
+  "extends": "solhint:recommended",
+  "plugins": ["prettier"],
+  "rules": {
+    "code-complexity": ["error", 8],
+    "compiler-version": ["error", "^0.8.0"],
+    "contract-name-camelcase": "warn",
+    "constructor-syntax": "error",
+    "func-visibility": ["error", { "ignoreConstructors": true }],
+    "max-line-length": ["error", 120],
+    "prettier/prettier": "error",
+    "reason-string": ["warn", { "maxLength": 64 }]
+  }
+}

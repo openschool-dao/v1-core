@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
+import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import '@openzeppelin/contracts/utils/Counters.sol';
+import '@openzeppelin/contracts/utils/Strings.sol';
 
-import "./libraries/Base64.sol";
+import './libraries/Base64.sol';
 
-import "hardhat/console.sol";
+import 'hardhat/console.sol';
 
 /**
  * @dev New skill minting must be allowed through a voting contract.
@@ -16,11 +16,10 @@ import "hardhat/console.sol";
  */
 
 contract OsSkill is ERC721 {
-
     /**
      * @notice skillIndex in Skill define the type of the NFT
      * Ex: Python skill NFT is 1 so all the NFTs for python will be 1
-    */
+     */
 
     struct Skill {
         uint skillIndex;
@@ -44,22 +43,13 @@ contract OsSkill is ERC721 {
      *
      * @dev We should remove the issuance of skills in the constructor but only
      * invoke the addSupportedSkill function.
-    */
+     */
 
-    constructor(
-        string[] memory skillNames,
-        string[] memory skillImageURIs
-    )
-        ERC721('OpenSchool Skills' ,'SKILL')
-    {
-
-        for(uint i = 0; i < skillNames.length; i += 1) {
-            _supportedSkills.push(Skill({
-                skillIndex: i,
-                name: skillNames[i],
-                imageURI: skillImageURIs[i],
-                recipient: address(0)
-            }));
+    constructor(string[] memory skillNames, string[] memory skillImageURIs) ERC721('OpenSchool Skills', 'SKILL') {
+        for (uint i = 0; i < skillNames.length; i += 1) {
+            _supportedSkills.push(
+                Skill({ skillIndex: i, name: skillNames[i], imageURI: skillImageURIs[i], recipient: address(0) })
+            );
         }
 
         _tokenIds.increment();
@@ -89,12 +79,7 @@ contract OsSkill is ERC721 {
 
     function addSupportedSkill(string memory name, string memory imageURI) external {
         uint256 index = _supportedSkills.length;
-        _supportedSkills.push(Skill({
-            skillIndex: index,
-            name: name,
-            imageURI: imageURI,
-            recipient: address(0)
-        }));
+        _supportedSkills.push(Skill({ skillIndex: index, name: name, imageURI: imageURI, recipient: address(0) }));
     }
 
     function tokenURI(uint256 _tokenId) public view override returns (string memory) {
@@ -116,9 +101,7 @@ contract OsSkill is ERC721 {
             )
         );
 
-        string memory output = string(
-          abi.encodePacked("data:application/json;base64,", json)
-        );
+        string memory output = string(abi.encodePacked('data:application/json;base64,', json));
 
         return output;
     }
