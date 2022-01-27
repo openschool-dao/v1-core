@@ -1,6 +1,5 @@
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
 
 import './interfaces/IOsERC20.sol';
 import 'hardhat/console.sol';
@@ -77,11 +76,15 @@ contract OsERC20 is IOsERC20 {
         return true;
     }
 
-    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public returns (bool) {
         _transfer(sender, recipient, amount);
 
         uint256 currentAllowance = _allowances[sender][msg.sender];
-        require(currentAllowance >= amount, "Transfer amount exceeds allowance");
+        require(currentAllowance >= amount, 'Transfer amount exceeds allowance');
 
         // TODO: handle underflow calculation
         _approve(sender, msg.sender, currentAllowance - amount);
@@ -98,15 +101,23 @@ contract OsERC20 is IOsERC20 {
         return true;
     }
 
-    function _approve(address owner, address spender, uint256 amount) internal {
+    function _approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) internal {
         _allowances[owner][spender] = amount;
 
         emit Approval(owner, spender, amount);
     }
 
-    function _transfer(address sender, address recipient, uint256 amount) private {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) private {
         uint256 senderBalance = _balances[sender];
-        require(senderBalance >= amount, "Address sender balance is too low");
+        require(senderBalance >= amount, 'Address sender balance is too low');
         // TODO: check underflow calculation
         _balances[sender] = senderBalance - amount;
         _balances[recipient] += amount;
