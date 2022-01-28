@@ -14,7 +14,32 @@ node scripts/sample-script.js
 npx hardhat help
 ```
 
-## TODO
+## Usage
+First install dependencies:
+```shell
+yarn install
+```
+
+### Compile
+Compile smart contracts with hardhat compile:
+
+```shell
+$ yarn compile
+```
+
+### Lint
+Actually run lint:sol and prettier. Lint solidity code:
+```shell
+$ yarn lint
+```
+
+### Test
+Run the Mocha/Chai tests:
+```shell
+$ yarn test
+```
+
+## Roadmap
 
 - ERC721 (NFT) or ERC1155 (multi NFT & tokens) for each track
 - Voting system to allow NFT holder to vote on attribution for new applicant

@@ -73,17 +73,17 @@ contract OsSkill is ERC721 {
         emit SkillMinted(recipient, skillIndex, newSkillId);
     }
 
-    function supportedSkills() external view returns (Skill[] memory) {
-        return _supportedSkills;
-    }
-
     function addSupportedSkill(string memory name, string memory imageURI) external {
         uint256 index = _supportedSkills.length;
         _supportedSkills.push(Skill({ skillIndex: index, name: name, imageURI: imageURI, recipient: address(0) }));
     }
 
-    function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-        Skill memory skill = _idsToSkills[_tokenId];
+    function supportedSkills() external view returns (Skill[] memory) {
+        return _supportedSkills;
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        Skill memory skill = _idsToSkills[tokenId];
 
         string memory json = Base64.encode(
             bytes(
@@ -92,7 +92,7 @@ contract OsSkill is ERC721 {
                         '{"name": "',
                         skill.name,
                         ' OS#',
-                        Strings.toString(_tokenId),
+                        Strings.toString(tokenId),
                         '", "description": "This NFT certifies his owner master this skill", "image": "',
                         skill.imageURI,
                         '"}'
