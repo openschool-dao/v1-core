@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.6;
 
-import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { ERC721Checkpointable } from './ERC721Checkpointable.sol';
+import { ERC721 } from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
@@ -15,7 +17,7 @@ import 'hardhat/console.sol';
  * todo: function to add a new skill in _supportedSkills
  */
 
-contract OsSkill is ERC721 {
+contract OsSkill is Ownable, ERC721Checkpointable {
     /**
      * @notice skillIndex in Skill define the type of the NFT
      * Ex: Python skill NFT is 1 so all the NFTs for python will be 1
@@ -55,7 +57,7 @@ contract OsSkill is ERC721 {
         _tokenIds.increment();
     }
 
-    function mintSkill(address recipient, uint skillIndex) external {
+    function mintSkill(address recipient, uint skillIndex) external onlyOwner {
         uint256 newSkillId = _tokenIds.current();
         _safeMint(recipient, newSkillId);
 

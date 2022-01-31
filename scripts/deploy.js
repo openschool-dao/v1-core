@@ -1,23 +1,41 @@
-// TODO: deployment must be coded. It does not work currently.
-
 const main = async () => {
-  // const erc20ContractFactory = await hre.ethers.getContractFactory('OsERC20');
-  // const erc20Contract = await erc20ContractFactory.deploy(
-  //     'OpenSchool Token',
-  //     'OST'
-  // );
-
-  // await erc20Contract.deployed();
-  // console.log("ERC20 Contract deployed to:", erc20Contract.address);
+  const timelockDelay = 2
 
   const skillContractFactory = await hre.ethers.getContractFactory('OsSkill')
+
+  const signerAddress = await skillContractFactory.signer.getAddress()
+  const signer = await ethers.getSigner(signerAddress)
+  console.log('Signer adress: ', signerAddress)
+
+  const adminAddressTransactionCount = await signer.getTransactionCount()
+  const expectedContractAddress = ethers.utils.getContractAddress({
+    from: signer.address,
+    nonce: adminAddressTransactionCount + 2,
+  })
+
+  // Skill Contract deployment
   const skillContract = await skillContractFactory.deploy(
     ['Solidity', 'Javascript', 'Typescript'],
     ['https://i.imgur.com/HyyK9bq.png', 'https://i.imgur.com/DnvDSV1.png', 'https://i.imgur.com/PrBtG6g.png'],
   )
-
   await skillContract.deployed()
-  console.log('Skill Contract deployed to:', skillContract.address)
+
+  // Timelock Contract deployment
+  const timelockFactory = await hre.ethers.getContractFactory('Timelock')
+  const timelockContract = await timelockFactory.deploy(expectedContractAddress, timelockDelay)
+  await timelockContract.deployed()
+
+  // Governor Contract deployment
+  const governorFactory = await ethers.getContractFactory('OsGov')
+  const governorContract = await governorFactory.deploy(skillContract.address, timelockContract.address)
+  await governorContract.deployed()
+
+  console.log('Dao deployed to: ', {
+    expectedContractAddress,
+    governor: governorContract.address,
+    timelock: timelockContract.address,
+    token: skillContract.address,
+  })
 }
 
 const runMain = async () => {
