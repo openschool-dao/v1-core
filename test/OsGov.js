@@ -4,7 +4,7 @@ const { ethers } = require('hardhat')
 describe('OsGov', () => {
   let txn
   let owner
-  let receiver
+  let proposer
   let applicant
   let addrs
   let skillContract
@@ -25,7 +25,7 @@ describe('OsGov', () => {
 
   before(async () => {
     // Set Signers
-    [owner, receiver, applicant, voter1, voter2, notVoter, ...addrs] = await ethers.getSigners()
+    [owner, proposer, applicant, voter1, voter2, notVoter, ...addrs] = await ethers.getSigners()
 
     const adminAddressTransactionCount = await owner.getTransactionCount()
     const expectedContractAddress = ethers.utils.getContractAddress({
@@ -51,19 +51,18 @@ describe('OsGov', () => {
     governorContract = await governorFactory.deploy(skillContract.address, timelockContract.address)
     await governorContract.deployed()
 
-    // A minimum of 2 NFTs are required in the Osgov.proposalThreshold() to create a proposal
-    await skillContract.connect(owner).mintSkill(receiver.address, 0)
-    await skillContract.connect(owner).mintSkill(receiver.address, 0)
-
+    // A minimum of 1 NFT is required by OsGov#proposalThreshold() to create a proposal
+    // A quorum of 2 NFT is required by a proposal to be successful. See OsGov#quorum()    
     await skillContract.connect(owner).mintSkill(owner.address, 0)
+    await skillContract.connect(owner).mintSkill(proposer.address, 0)
     await skillContract.connect(owner).mintSkill(voter1.address, 0)
     await skillContract.connect(owner).mintSkill(voter2.address, 0)
   })
 
   it('should create a new proposal', async () => {
-    const calldata = skillContract.interface.encodeFunctionData('mintSkill', [applicant.address, 0])
+    calldata = skillContract.interface.encodeFunctionData('mintSkill', [applicant.address, 0])
     txn = await governorContract
-      .connect(receiver)
+      .connect(proposer)
       ['propose(address[],uint256[],bytes[],string)'](
         [skillContract.address], [0], [calldata], 'Issuance#1'
       )
