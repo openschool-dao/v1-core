@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.6;
 
-import './interfaces/IOsERC20.sol';
 import 'hardhat/console.sol';
 
 /**
@@ -10,7 +9,7 @@ import 'hardhat/console.sol';
  * Mint and burn will be called by the voting contract named Governor.
  */
 
-contract OsERC20 is IOsERC20 {
+contract OsToken {
     mapping(address => uint256) private _balances;
     mapping(address => mapping(address => uint256)) private _allowances;
 

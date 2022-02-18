@@ -22,11 +22,11 @@ contract OsGov is Governor, GovernorCompatibilityBravo, GovernorVotesComp, Gover
     }
 
     function quorum(uint256 blockNumber) public pure override returns (uint256) {
-        return 3;
+        return 2;
     }
 
     function proposalThreshold() public pure override returns (uint256) {
-        return 2;
+        return 1;
     }
 
     // The following functions are overrides required by Solidity.

@@ -30,6 +30,8 @@ const main = async () => {
   const governorContract = await governorFactory.deploy(skillContract.address, timelockContract.address)
   await governorContract.deployed()
 
+  //TODO give the ownership of OsSkill to Timelock
+
   console.log('Dao deployed to: ', {
     expectedContractAddress,
     governor: governorContract.address,

@@ -9,7 +9,7 @@
 const { expect } = require('chai')
 const { ethers } = require('hardhat')
 
-describe('OsERC20', () => {
+describe('OsToken', () => {
   let Token
   let osToken
   let owner
@@ -19,7 +19,7 @@ describe('OsERC20', () => {
 
   describe('Deployment', function () {
     before(async () => {
-      Token = await ethers.getContractFactory('OsERC20')
+      Token = await ethers.getContractFactory('OsToken')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
     })
@@ -68,7 +68,7 @@ describe('OsERC20', () => {
 
   describe('Burning token', () => {
     beforeEach(async () => {
-      Token = await ethers.getContractFactory('OsERC20')
+      Token = await ethers.getContractFactory('OsToken')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 
@@ -101,7 +101,7 @@ describe('OsERC20', () => {
 
   describe('Transfer token', () => {
     beforeEach(async () => {
-      Token = await ethers.getContractFactory('OsERC20')
+      Token = await ethers.getContractFactory('OsToken')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 
@@ -127,7 +127,7 @@ describe('OsERC20', () => {
 
   describe('Allowance of token', () => {
     before(async () => {
-      Token = await ethers.getContractFactory('OsERC20')
+      Token = await ethers.getContractFactory('OsToken')
       osToken = await Token.deploy('OpenSchool Token', 'OST')
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
 

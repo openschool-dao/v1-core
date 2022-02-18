@@ -30,7 +30,11 @@ module.exports = {
   },
   networks: {
     rinkeby: {
-      url: process.env.STAGING_ALCHEMY_KEY,
+      url: process.env.ALCHEMY_RINKEBY_KEY,
+      accounts: [process.env.PRIVATE_KEY],
+    },
+    mumbai: {
+      url: process.env.ALCHEMY_MUMBAI_KEY,
       accounts: [process.env.PRIVATE_KEY],
     },
   },
