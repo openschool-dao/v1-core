@@ -28,6 +28,9 @@
     "@openzeppelin/contracts": "^4.4.2",
     "dotenv": "^14.2.0"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "keywords": [
     "dao",
     "ethereum",
@@ -43,7 +46,16 @@
     "prettier": "prettier --config ./.prettierrc.yaml --write \"**/*.{js,json,md,sol,ts}\"",
     "prettier:check": "prettier --check --config ./.prettierrc.yaml \"**/*.{js,json,md,sol,ts}\"",
     "postinstall": "husky install",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "react:start": "yarn workspace @openschool-dao/react-app start",
+    "react:build": "yarn workspace @openschool-dao/react-app build",
+    "react:test": "yarn workspace @openschool-dao/react-app test",
+    "react:eject": "yarn workspace @openschool-dao/react-app eject"
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.1.1",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
 }
