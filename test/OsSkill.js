@@ -8,14 +8,18 @@ describe('OsSkill', () => {
   let addr1
   let addr2
   let addrs
+  let txn
+  const imageURIs = [
+    'https://i.imgur.com/HyyK9bq.png',
+    'https://i.imgur.com/DnvDSV1.png',
+    'https://i.imgur.com/PrBtG6g.png',
+  ]
+  const names = ['Solidity', 'Javascript', 'Typescript']
 
   describe('Deployment', function () {
     before(async () => {
       Token = await ethers.getContractFactory('OsSkill')
-      osToken = await Token.deploy(
-        ['Solidity', 'Javascript', 'Typescript'],
-        ['https://i.imgur.com/HyyK9bq.png', 'https://i.imgur.com/DnvDSV1.png', 'https://i.imgur.com/PrBtG6g.png'],
-      )
+      osToken = await Token.deploy('https://metadata.io/{id}.json')
       ;[owner, addr1, addr2, ...addrs] = await ethers.getSigners()
     })
 
@@ -26,39 +30,60 @@ describe('OsSkill', () => {
     it('Should set the right symbol', async function () {
       expect(await osToken.symbol()).to.equal('SKILL')
     })
-
-    it('Should initialized the skills', async function () {
-      expect(await osToken.supportedSkills()).to.have.lengthOf(3)
-    })
   })
 
-  describe('Add supported Skill', () => {
+  describe('Add a new skill', () => {
+    it('Only contract owner can add new skill', async function () {
+      await expect(osToken.connect(addr1).addSkill(names[1], imageURIs[1])).to.be.revertedWith(
+        'Ownable: caller is not the owner',
+      )
+    })
     it('Should add new supported skill', async function () {
-      await osToken.addSupportedSkill('Rust', 'https://i.imgur.com/zgqvHVy.png')
-
-      const getSkillsTxn = await osToken.supportedSkills()
-      expect(getSkillsTxn).to.have.lengthOf(4)
-
-      const skills = getSkillsTxn.map(skillData => {
+      await osToken.addSkill(names[1], imageURIs[1])
+      const skillsTxn = await osToken.skills()
+      const skills = skillsTxn.map(skillData => {
         return {
-          skillIndex: skillData.skillIndex,
           name: skillData.name,
           imageURI: skillData.imageURI,
-          recipient: skillData.recipient,
         }
       })
+      expect(skillsTxn).to.have.lengthOf(1)
+      expect(skills[0].name).to.equal(names[1])
+    })
+    it('function getSkill() must return skill attributes', async () => {
+      const [name, imageURI] = await osToken.getSkill(0)
+      expect(name).to.equal(names[1])
+      expect(imageURI).to.equal(imageURIs[1])
+    })
 
-      expect(skills[3].name).to.equal('Rust')
-      expect(skills[3].recipient).to.equal(ethers.constants.AddressZero)
+    it('function skills() must return the list of skills', async () => {
+      await osToken.addSkill(names[0], imageURIs[0])
+      txn = await osToken.skills()
+      expect(txn).to.have.lengthOf(2)
     })
   })
 
   describe('Minting token', () => {
-    it('Should mint a new Skill for user', async function () {
-      await expect(osToken.mintSkill(addr1.address, 0)).to.emit(osToken, 'SkillMinted').withArgs(addr1.address, 0, 1)
+    it('Only contract owner can mint token', async function () {
+      await expect(osToken.connect(addr1).mint(addr1.address, 0, [])).to.be.revertedWith(
+        'Ownable: caller is not the owner',
+      )
+      expect(await osToken.balanceOf(addr1.address, 0)).to.equal(0)
+    })
+    it('Owner can mint token to user', async () => {
+      await osToken.connect(owner).mint(addr1.address, 0, [])
+      expect(await osToken.balanceOf(addr1.address, 0)).to.equal(1)
+    })
+  })
 
-      expect(await osToken.balanceOf(addr1.address)).to.equal(1)
-      expect(await osToken.ownerOf(1)).to.equal(addr1.address)
+  describe('Burning token', () => {
+    it('Only contract owner can burn a token', async () => {
+      await expect(osToken.connect(addr1).burn(addr1.address, 0)).to.be.revertedWith('Ownable: caller is not the owner')
+      expect(await osToken.balanceOf(addr1.address, 0)).to.equal(1)
+    })
+    it('Owner can burn a token', async () => {
+      await osToken.connect(owner).burn(addr1.address, 0)
+      expect(await osToken.balanceOf(addr1.address, 0)).to.equal(0)
     })
   })
 })

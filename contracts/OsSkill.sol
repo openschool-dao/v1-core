@@ -1,91 +1,54 @@
 // SPDX-License-Identifier: MIT
+
+/**
+  /$$$$$$  /$$       /$$ /$$ /$$
+ /$$__  $$| $$      |__/| $$| $$
+| $$  \__/| $$   /$$ /$$| $$| $$
+|  $$$$$$ | $$  /$$/| $$| $$| $$
+ \____  $$| $$$$$$/ | $$| $$| $$
+ /$$  \ $$| $$_  $$ | $$| $$| $$
+|  $$$$$$/| $$ \  $$| $$| $$| $$
+ \______/ |__/  \__/|__/|__/|__/
+*/
+
 pragma solidity ^0.8.6;
 
-import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
-import { ERC721Checkpointable } from './ERC721Checkpointable.sol';
-import { ERC721 } from '@openzeppelin/contracts/token/ERC721/ERC721.sol';
-import '@openzeppelin/contracts/utils/Counters.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
 import './libraries/Base64.sol';
 
-import 'hardhat/console.sol';
+// standard function "uri" must be implemented
+// metadataURI must be implemented for opensea, compatibility
+// https://docs.opensea.io/docs/metadata-standards#metadata-structure
+// we may use openzeppelin's ERC1155Supply.sol to count votes.
 
-/**
- * @dev New skill minting must be allowed through a voting contract.
- * to interact with another contract use solidity Interface.
- * todo: function to add a new skill in _supportedSkills
- */
-
-contract OsSkill is Ownable, ERC721Checkpointable {
-    /**
-     * @notice skillIndex in Skill define the type of the NFT
-     * Ex: Python skill NFT is 1 so all the NFTs for python will be 1
-     */
+contract OsSkill is Ownable, ERC1155 {
+    string public name;
+    string public symbol;
 
     struct Skill {
-        uint skillIndex;
         string name;
         string imageURI;
-        address recipient;
+    }
+    Skill[] private _skills;
+
+    constructor(string memory uri) ERC1155(uri) {
+        name = 'OpenSchool Skills';
+        symbol = 'SKILL';
     }
 
-    using Counters for Counters.Counter;
-
-    Counters.Counter private _tokenIds;
-    Skill[] private _supportedSkills;
-    mapping(uint256 => Skill) private _idsToSkills;
-    mapping(address => uint256) private _ownersToSkillIds;
-
-    event SkillMinted(address indexed recipient, uint256 indexed skillIndex, uint256 newSkillId);
-
-    /**
-     * @notice Constructor populates the default skills available to be minted
-     * @notice we initialize tokenId to start minting with an id of 1.
-     *
-     * @dev We should remove the issuance of skills in the constructor but only
-     * invoke the addSupportedSkill function.
-     */
-
-    constructor(string[] memory skillNames, string[] memory skillImageURIs) ERC721('OpenSchool Skills', 'SKILL') {
-        for (uint i = 0; i < skillNames.length; i += 1) {
-            _supportedSkills.push(
-                Skill({ skillIndex: i, name: skillNames[i], imageURI: skillImageURIs[i], recipient: address(0) })
-            );
-        }
-
-        _tokenIds.increment();
+    function skills() external view returns (Skill[] memory) {
+        return _skills;
     }
 
-    function mintSkill(address recipient, uint skillIndex) external onlyOwner {
-        uint256 newSkillId = _tokenIds.current();
-        _safeMint(recipient, newSkillId);
-
-        Skill memory skill = _supportedSkills[skillIndex];
-
-        _idsToSkills[newSkillId] = Skill({
-            skillIndex: skillIndex,
-            name: skill.name,
-            imageURI: skill.imageURI,
-            recipient: recipient
-        });
-
-        _tokenIds.increment();
-
-        emit SkillMinted(recipient, skillIndex, newSkillId);
+    function addSkill(string memory name, string memory imageURI) external onlyOwner {
+        _skills.push(Skill({ name: name, imageURI: imageURI }));
     }
 
-    function addSupportedSkill(string memory name, string memory imageURI) external {
-        uint256 index = _supportedSkills.length;
-        _supportedSkills.push(Skill({ skillIndex: index, name: name, imageURI: imageURI, recipient: address(0) }));
-    }
-
-    function supportedSkills() external view returns (Skill[] memory) {
-        return _supportedSkills;
-    }
-
-    function tokenURI(uint256 tokenId) public view override returns (string memory) {
-        Skill memory skill = _idsToSkills[tokenId];
+    function tokenURI(uint256 tokenId) public view returns (string memory) {
+        Skill memory skill = _skills[tokenId];
 
         string memory json = Base64.encode(
             bytes(
@@ -93,7 +56,7 @@ contract OsSkill is Ownable, ERC721Checkpointable {
                     abi.encodePacked(
                         '{"name": "',
                         skill.name,
-                        ' OS#',
+                        '#',
                         Strings.toString(tokenId),
                         '", "description": "This NFT certifies his owner master this skill", "image": "',
                         skill.imageURI,
@@ -102,9 +65,28 @@ contract OsSkill is Ownable, ERC721Checkpointable {
                 )
             )
         );
-
         string memory output = string(abi.encodePacked('data:application/json;base64,', json));
-
         return output;
     }
+
+    function getSkill(uint256 id) public view returns (string memory name, string memory imageURI) {
+        Skill memory skill = _skills[id];
+        return (skill.name, skill.imageURI);
+    }
+
+    function mint(
+        address to,
+        uint256 id,
+        bytes memory data
+    ) external onlyOwner {
+        require(_skills.length >= 1, 'OsSkill: skill does not exist');
+        require(id <= _skills.length - 1, 'OsSkill: id do not match with skills');
+        _mint(to, id, uint256(1), data);
+    }
+
+    function burn(address from, uint256 id) external {
+        require(msg.sender == from, 'OsSkill: caller is not owner of this id');
+        _burn(from, id, uint256(1));
+    }
+    // Add setURI() inheriting from ERC1155#_setURI with additional requirements
 }
