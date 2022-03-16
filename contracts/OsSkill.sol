@@ -15,8 +15,10 @@ pragma solidity ^0.8.6;
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
+import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 import '@openzeppelin/contracts/utils/Strings.sol';
 
+import './ERC1155Votes.sol';
 import './libraries/Base64.sol';
 
 // standard function "uri" must be implemented
@@ -24,8 +26,7 @@ import './libraries/Base64.sol';
 // https://docs.opensea.io/docs/metadata-standards#metadata-structure
 // we may use openzeppelin's ERC1155Supply.sol to count votes.
 
-contract OsSkill is Ownable, ERC1155 {
-    string public name;
+contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
     string public symbol;
 
     struct Skill {
@@ -34,8 +35,7 @@ contract OsSkill is Ownable, ERC1155 {
     }
     Skill[] private _skills;
 
-    constructor(string memory uri) ERC1155(uri) {
-        name = 'OpenSchool Skills';
+    constructor(string memory uri) ERC1155(uri) EIP712('OpenSchool Skills', '1') {
         symbol = 'SKILL';
     }
 
@@ -45,6 +45,21 @@ contract OsSkill is Ownable, ERC1155 {
 
     function addSkill(string memory name, string memory imageURI) external onlyOwner {
         _skills.push(Skill({ name: name, imageURI: imageURI }));
+    }
+
+    function mint(
+        address to,
+        uint256 id,
+        bytes memory data
+    ) external onlyOwner {
+        require(_skills.length >= 1, 'OsSkill: skill does not exist');
+        require(id <= _skills.length - 1, 'OsSkill: id do not match with skills');
+        _mint(to, id, uint256(1), data);
+    }
+
+    function burn(address from, uint256 id) external {
+        require(msg.sender == from, 'OsSkill: caller is not owner of this id');
+        _burn(from, id, uint256(1));
     }
 
     function tokenURI(uint256 tokenId) public view returns (string memory) {
@@ -72,21 +87,6 @@ contract OsSkill is Ownable, ERC1155 {
     function getSkill(uint256 id) public view returns (string memory name, string memory imageURI) {
         Skill memory skill = _skills[id];
         return (skill.name, skill.imageURI);
-    }
-
-    function mint(
-        address to,
-        uint256 id,
-        bytes memory data
-    ) external onlyOwner {
-        require(_skills.length >= 1, 'OsSkill: skill does not exist');
-        require(id <= _skills.length - 1, 'OsSkill: id do not match with skills');
-        _mint(to, id, uint256(1), data);
-    }
-
-    function burn(address from, uint256 id) external {
-        require(msg.sender == from, 'OsSkill: caller is not owner of this id');
-        _burn(from, id, uint256(1));
     }
     // Add setURI() inheriting from ERC1155#_setURI with additional requirements
 }

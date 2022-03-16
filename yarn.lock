@@ -261,7 +261,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.12.13, @babel/helper-plugin-utils@npm:^7.13.0, @babel/helper-plugin-utils@npm:^7.14.5, @babel/helper-plugin-utils@npm:^7.16.7, @babel/helper-plugin-utils@npm:^7.8.0, @babel/helper-plugin-utils@npm:^7.8.3":
+"@babel/helper-plugin-utils@npm:^7.0.0, @babel/helper-plugin-utils@npm:^7.10.4, @babel/helper-plugin-utils@npm:^7.13.0, @babel/helper-plugin-utils@npm:^7.14.5, @babel/helper-plugin-utils@npm:^7.16.7, @babel/helper-plugin-utils@npm:^7.8.0, @babel/helper-plugin-utils@npm:^7.8.3":
   version: 7.16.7
   resolution: "@babel/helper-plugin-utils@npm:7.16.7"
   checksum: d08dd86554a186c2538547cd537552e4029f704994a9201d41d82015c10ed7f58f9036e8d1527c3760f042409163269d308b0b3706589039c5f1884619c6d4ce
@@ -626,15 +626,29 @@ __metadata:
   linkType: hard
 
 "@babel/plugin-syntax-class-properties@npm:^7.12.13, @babel/plugin-syntax-class-properties@npm:^7.8.3":
-  version: 7.12.13
+  version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-class-properties@npm:7.12.13"
   dependencies:
-    "@babel/helper-plugin-utils": ^7.12.13
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
+    "@commitlint/config-conventional": ^16.0.0
+    "@nomiclabs/hardhat-ethers": ^2.0.4
+    "@nomiclabs/hardhat-waffle": ^2.0.1
+    "@openzeppelin/contracts": ^4.5.0
+    chai: ^4.3.4
+    dotenv: ^14.2.0
+    ethereum-waffle: ^3.4.0
+    ethers: ^5.5.3
+    hardhat: ^2.8.2
+    husky: ^7.0.4
+    lint-staged: ^12.3.6
+    mocha: ^9.2.0
+    pinst: ^2.1.6
+    prettier: ^2.5.1
+    prettier-plugin-solidity: ^1.0.0-beta.19
+    solhint: ^3.3.6
+    solhint-plugin-prettier: ^0.0.5
   checksum: 24f34b196d6342f28d4bad303612d7ff566ab0a013ce89e775d98d6f832969462e7235f3e7eaf17678a533d4be0ba45d3ae34ab4e5a9dcbda5d98d49e5efa2fc
-  languageName: node
-  linkType: hard
+  languageName: unknown
+  linkType: soft
 
 "@babel/plugin-syntax-class-static-block@npm:^7.14.5":
   version: 7.14.5
@@ -2563,7 +2577,7 @@ __metadata:
     "@commitlint/config-conventional": ^16.0.0
     "@nomiclabs/hardhat-ethers": ^2.0.4
     "@nomiclabs/hardhat-waffle": ^2.0.1
-    "@openzeppelin/contracts": ^4.4.2
+    "@openzeppelin/contracts": ^4.5.0
     chai: ^4.3.4
     dotenv: ^14.2.0
     ethereum-waffle: ^3.4.0
@@ -2580,10 +2594,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openzeppelin/contracts@npm:^4.4.2":
-  version: 4.4.2
-  resolution: "@openzeppelin/contracts@npm:4.4.2"
-  checksum: 5c6be7bfe757c6a43eb5b24aa9c61a79deaed9de4bc5f59356b35f5519b0fb340f4da8b4df99588bded5e6b6a773fc54961917a1c657063247c1763f9752bd0e
+"@openzeppelin/contracts@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "@openzeppelin/contracts@npm:4.5.0"
+  checksum: 1c9c5dff041905771d2a83ac29c64dbf0b48603de43f74a34fb1358813d7c7bf259efe2f64e2112b410c5cca7a0b41aaedd882368be5f01a6d50a3ee0740f962
   languageName: node
   linkType: hard
 
