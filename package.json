@@ -40,8 +40,8 @@
     "compile": "hardhat compile",
     "lint": "yarn lint:sol && yarn prettier:check",
     "lint:sol": "solhint --config ./.solhint.json \"contracts/**/*.sol\"",
-    "prettier": "prettier --config ./.prettierrc --write \"**/*.{js,json,md,sol,ts}\"",
-    "prettier:check": "prettier --check --config ./.prettierrc \"**/*.{js,json,md,sol,ts}\"",
+    "prettier": "prettier --config ./.prettierrc.yaml --write \"**/*.{js,json,md,sol,ts}\"",
+    "prettier:check": "prettier --check --config ./.prettierrc.yaml \"**/*.{js,json,md,sol,ts}\"",
     "postinstall": "husky install",
     "test": "hardhat test"
   },
