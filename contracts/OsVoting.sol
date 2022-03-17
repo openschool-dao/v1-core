@@ -1,17 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.6;
 
-import "@openzeppelin/contracts/governance/Governor.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotes.sol";
-import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol";
+import '@openzeppelin/contracts/governance/Governor.sol';
+import '@openzeppelin/contracts/governance/extensions/GovernorCountingSimple.sol';
+import '@openzeppelin/contracts/governance/extensions/GovernorVotes.sol';
+import '@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFraction.sol';
 
 contract OsVoting is Governor, GovernorCountingSimple, GovernorVotes, GovernorVotesQuorumFraction {
-    constructor(IVotes _token)
-        Governor('OsVoting')
-        GovernorVotes(_token)
-        GovernorVotesQuorumFraction(4)
-    {}
+    constructor(IVotes _token) Governor('OsVoting') GovernorVotes(_token) GovernorVotesQuorumFraction(4) {}
 
     function votingDelay() public pure override returns (uint256) {
         return 1; // 1 block
@@ -21,9 +17,9 @@ contract OsVoting is Governor, GovernorCountingSimple, GovernorVotes, GovernorVo
         return 9; // 15 minutes
     }
 
-    function proposalThreshold() public pure override returns (uint256) {
-        return 1;
-    }
+    // function proposalThreshold() public pure override returns (uint256) {
+    //     return 0;
+    // }
 
     // The following functions are overrides required by Solidity.
 
@@ -44,5 +40,4 @@ contract OsVoting is Governor, GovernorCountingSimple, GovernorVotes, GovernorVo
     {
         return super.getVotes(account, blockNumber);
     }
-
 }

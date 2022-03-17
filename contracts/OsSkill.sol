@@ -15,7 +15,7 @@ pragma solidity ^0.8.6;
 
 import '@openzeppelin/contracts/access/Ownable.sol';
 import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
-import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
+import '@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
 import './ERC1155Votes.sol';
@@ -54,7 +54,10 @@ contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
     ) external onlyOwner {
         require(_skills.length >= 1, 'OsSkill: skill does not exist');
         require(id <= _skills.length - 1, 'OsSkill: id do not match with skills');
+
         _mint(to, id, uint256(1), data);
+
+        _afterTokenTransfer(address(0), to, id, 1);
     }
 
     function burn(address from, uint256 id) external {
@@ -88,5 +91,4 @@ contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
         Skill memory skill = _skills[id];
         return (skill.name, skill.imageURI);
     }
-    // Add setURI() inheriting from ERC1155#_setURI with additional requirements
 }
