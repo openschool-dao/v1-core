@@ -6,7 +6,6 @@ import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/utils/Checkpoints.sol';
 import '@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol';
 import './IVotes.sol';
-import 'hardhat/console.sol';
 
 abstract contract Votes is IVotes, Context, EIP712 {
     using Checkpoints for Checkpoints.History;
@@ -15,7 +14,7 @@ abstract contract Votes is IVotes, Context, EIP712 {
     bytes32 private constant _DELEGATION_TYPEHASH =
         keccak256('Delegation(address delegatee,uint256 nonce,uint256 expiry)');
 
-    mapping(address => address) private _delegation;
+    mapping(uint256 => mapping(address => address)) private _delegation;
     mapping(uint256 => mapping(address => Checkpoints.History)) private _delegateCheckpoints;
     mapping(uint256 => Checkpoints.History) private _totalCheckpoints;
 
@@ -69,14 +68,14 @@ abstract contract Votes is IVotes, Context, EIP712 {
     /**
      * @dev Returns the delegate that `account` has chosen.
      */
-    function delegates(address account) public view virtual override returns (address) {
-        return _delegation[account];
+    function delegates(uint256 id, address account) public view virtual override returns (address) {
+        return _delegation[id][account];
     }
 
     /**
      * @dev Delegates votes from the sender to `delegatee`.
      */
-    function delegate(address delegatee, uint256 id) public virtual override {
+    function delegate(uint256 id, address delegatee) public virtual override {
         address account = _msgSender();
         _delegate(account, delegatee, id);
     }
@@ -114,10 +113,10 @@ abstract contract Votes is IVotes, Context, EIP712 {
         address delegatee,
         uint256 id
     ) internal virtual {
-        address oldDelegate = delegates(account);
-        _delegation[account] = delegatee;
+        address oldDelegate = delegates(id, account);
+        _delegation[id][account] = delegatee;
 
-        emit DelegateChanged(account, oldDelegate, delegatee);
+        emit DelegateChanged(id, account, oldDelegate, delegatee);
         _moveDelegateVotes(oldDelegate, delegatee, id, _getVotingUnits(account, id));
     }
 
@@ -133,12 +132,11 @@ abstract contract Votes is IVotes, Context, EIP712 {
     ) internal virtual {
         if (from == address(0)) {
             _totalCheckpoints[id].push(_add, amount);
-            console.log('transferVotingUnit');
         }
         if (to == address(0)) {
             _totalCheckpoints[id].push(_subtract, amount);
         }
-        _moveDelegateVotes(delegates(from), delegates(to), id, amount);
+        _moveDelegateVotes(delegates(id, from), delegates(id, to), id, amount);
     }
 
     /**
@@ -153,11 +151,11 @@ abstract contract Votes is IVotes, Context, EIP712 {
         if (from != to && amount > 0) {
             if (from != address(0)) {
                 (uint256 oldValue, uint256 newValue) = _delegateCheckpoints[id][from].push(_subtract, amount);
-                emit DelegateVotesChanged(from, oldValue, newValue);
+                emit DelegateVotesChanged(id, from, oldValue, newValue);
             }
             if (to != address(0)) {
                 (uint256 oldValue, uint256 newValue) = _delegateCheckpoints[id][to].push(_add, amount);
-                emit DelegateVotesChanged(to, oldValue, newValue);
+                emit DelegateVotesChanged(id, to, oldValue, newValue);
             }
         }
     }

@@ -21,12 +21,30 @@ const main = async () => {
 
   // Mint skill or transfer
   await skillContract.mint(owner.address, 0, [])
-  console.log('Owner balance for token 0')
+  await hre.ethers.provider.send('evm_mine')
+  console.log('Mint: new owner balance for token 0')
   console.log(await skillContract.balanceOf(owner.address, 0))
+  console.log('----------------')
+
+  await skillContract.mint(owner.address, 0, [])
+  await hre.ethers.provider.send('evm_mine')
+  console.log('Mint: new owner balance for token 0')
+  console.log(await skillContract.balanceOf(owner.address, 0))
+  console.log('----------------')
 
   // Check for votes count
-  console.log('Owner votes')
-  console.log(await skillContract.getVotes(owner.address))
+  await hre.ethers.provider.send('evm_mine')
+  const latestBlock = await hre.ethers.provider.getBlock('latest')
+  console.log('getPastTokenSupply: ')
+  console.log(await skillContract.getPastTotalSupply(0, latestBlock.number - 1))
+  console.log('getVotes of owner: ')
+  console.log(await skillContract.getVotes(0, owner.address))
+
+  // Delegate votes
+  console.log('Delegate to proposer')
+  await skillContract.delegate(0, proposer.address)
+  console.log('getVotes of proposer')
+  console.log(await skillContract.getVotes(0, proposer.address))
 
   // Deploy OsGov Contract
   // const votingFactory = await ethers.getContractFactory('OsVoting')

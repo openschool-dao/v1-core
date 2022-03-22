@@ -11,12 +11,17 @@ interface IVotes {
     /**
      * @dev Emitted when an account changes their delegate.
      */
-    event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate);
+    event DelegateChanged(
+        uint256 id,
+        address indexed delegator,
+        address indexed fromDelegate,
+        address indexed toDelegate
+    );
 
     /**
      * @dev Emitted when a token transfer or delegate change results in changes to a delegate's number of votes.
      */
-    event DelegateVotesChanged(address indexed delegate, uint256 previousBalance, uint256 newBalance);
+    event DelegateVotesChanged(uint256 id, address indexed delegate, uint256 previousBalance, uint256 newBalance);
 
     /**
      * @dev Returns the current amount of votes that `account` has.
@@ -44,12 +49,12 @@ interface IVotes {
     /**
      * @dev Returns the delegate that `account` has chosen.
      */
-    function delegates(address account) external view returns (address);
+    function delegates(uint256 id, address account) external view returns (address);
 
     /**
      * @dev Delegates votes from the sender to `delegatee`.
      */
-    function delegate(address delegatee, uint256 id) external;
+    function delegate(uint256 id, address delegatee) external;
 
     /**
      * @dev Delegates votes from signer to `delegatee`.
