@@ -55,14 +55,17 @@ contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
         require(_skills.length >= 1, 'OsSkill: skill does not exist');
         require(id <= _skills.length - 1, 'OsSkill: id do not match with skills');
 
-        _mint(to, id, uint256(1), data);
+        _mint(to, id, 1, data);
 
         _afterTokenTransfer(address(0), to, id, 1);
     }
 
     function burn(address from, uint256 id) external {
         require(msg.sender == from, 'OsSkill: caller is not owner of this id');
-        _burn(from, id, uint256(1));
+
+        _burn(from, id, 1);
+
+        _afterTokenTransfer(from, address(0), id, 1);
     }
 
     function tokenURI(uint256 tokenId) public view returns (string memory) {

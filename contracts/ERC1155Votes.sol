@@ -4,8 +4,6 @@ pragma solidity ^0.8.6;
 import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
 import './Votes.sol';
 
-import 'hardhat/console.sol';
-
 abstract contract ERC1155Votes is ERC1155, Votes {
     /**
      * @dev Must return the voting units held by an account.
