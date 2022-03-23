@@ -45,23 +45,25 @@ const main = async () => {
   await skillContract.delegate(0, proposer.address)
   console.log('getVotes of proposer')
   console.log(await skillContract.getVotes(0, proposer.address))
+  console.log('----------------')
 
   // Deploy OsGov Contract
-  // const votingFactory = await ethers.getContractFactory('OsVoting')
-  // votingContract = await votingFactory.deploy(skillContract.address)
-  // await votingContract.deployed()
-  // console.log('Dao deployed to')
-  // console.log(votingContract.address)
-  // console.log('----------------')
+  const votingFactory = await ethers.getContractFactory('OsVoting')
+  votingContract = await votingFactory.deploy(skillContract.address, 'OsVoting')
+  await votingContract.deployed()
+  console.log('Voting deployed to')
+  console.log(votingContract.address)
+  console.log('----------------')
 
   // Add proposal
-  // calldata = skillContract.interface.encodeFunctionData('mint', [applicant.address, 0, []])
-  // const proposalTxn = await votingContract['propose(address[],uint256[],bytes[],string)']([skillContract.address], [0], [calldata], 'Issuance#1')
-  // const receipt = await proposalTxn.wait()
-  // const proposalId = receipt.events[0].args.proposalId
-  // console.log('New proposal id')
-  // console.log(proposalId)
-  // console.log('----------------')
+  calldata = skillContract.interface.encodeFunctionData('mint', [applicant.address, 0, []])
+  const proposalTxn = await votingContract.propose(skillContract.address, calldata, 'Issuance#1')
+  console.log('Proposal created')
+  const receipt = await proposalTxn.wait()
+  const proposalId = receipt.events[0].args.proposalId
+  console.log('New proposal id')
+  console.log(proposalId)
+  console.log('----------------')
 
   // Add vote on new proposal
   // await hre.ethers.provider.send('evm_mine')
