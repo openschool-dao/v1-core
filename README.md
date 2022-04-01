@@ -8,7 +8,6 @@
 <details>
   <summary> Git flow </summary>
   This is our [git flow](FLOW.md)
-  <link/>
 </details>
 
 <details>
