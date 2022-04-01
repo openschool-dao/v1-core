@@ -1,4 +1,4 @@
-# :OpenSchool: FLOW
+# OpenSchool GITFLOW :sunglasses:
 
 ## 1. A feature ? Issues
 

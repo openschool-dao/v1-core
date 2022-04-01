@@ -1,6 +1,18 @@
-# Basic Sample Hardhat Project
+# OpenSchool DAO
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+<details>
+  <summary> Git flow </summary>
+  This is our [gitflow](FLOW.md)! 
+</details>
+
+<details>
+  <summary> Usage </summary>
+
+First install dependencies:
+
+```shell
+yarn install
+```
 
 Try running some of the following tasks:
 
@@ -12,14 +24,6 @@ npx hardhat test
 npx hardhat node
 node scripts/sample-script.js
 npx hardhat help
-```
-
-## Usage
-
-First install dependencies:
-
-```shell
-yarn install
 ```
 
 ### Compile
@@ -68,8 +72,12 @@ await governor.propose(
 );
 ```
 
-## Roadmap
+</details>
+
+<details>
+  <summary> Roadmap  </summary>
 
 - ERC721 (NFT) or ERC1155 (multi NFT & tokens) for each track
 - Voting system to allow NFT holder to vote on attribution for new applicant
 - Complete test for every Contracts and functions
+</details>
