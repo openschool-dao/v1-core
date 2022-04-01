@@ -87,6 +87,7 @@ const main = async () => {
 
   // Check if NFT has been minted
   console.log('CHECK SUPPLY AND VOTES')
+  await hre.ethers.provider.send('evm_mine')
   lastBlock = await hre.ethers.provider.getBlock('latest')
   console.log('Token supply: ', await skillContract.getPastTotalSupply(0, lastBlock.number - 1))
   console.log("Applicant's balance: ", await skillContract.balanceOf(applicant.address, 0))
