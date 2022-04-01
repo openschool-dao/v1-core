@@ -37,7 +37,7 @@ To do this put `#` followed by the issue number in your commit message.
 Exemple :
 
 ```
-git commit -m '#2 feat: Imported OS logo'
+git commit -m 'feat: #2 Imported OS logo'
 ```
 
 ### A clear commit message
@@ -54,7 +54,7 @@ git commit -m 'oups'
 Exemple with some class: :sunglasses:
 
 ```
-git commit -m '#42 chore: add libs for CI'
+git commit -m 'chore: #42 add libs for CI'
 ```
 
 ## 4. Branches: merge requests & code reviews
