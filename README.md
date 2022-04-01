@@ -2,7 +2,7 @@
 
 <details>
   <summary> Git flow </summary>
-  This is our [gitflow](FLOW.md)! 
+  This is our [gitflow](FLOW.md)
 </details>
 
 <details>
