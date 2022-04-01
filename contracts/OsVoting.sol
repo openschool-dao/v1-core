@@ -8,10 +8,6 @@ import '@openzeppelin/contracts/utils/Address.sol';
 
 import './votes/IVotes.sol';
 import './IOsVoting.sol';
-import 'hardhat/console.sol';
-
-// TODO implement ERC165 and IERC165
-// Add support interface
 
 // TODO implement or remove all the functions: quorum(), getVotesWithParams()
 
@@ -120,9 +116,6 @@ contract OsVoting is ERC165, EIP712, IOsVoting {
 
         uint256 deadline = proposalDeadline(proposalId);
 
-        console.log('Proposal deadline: ', deadline);
-        console.log('Current block: ', block.number);
-        console.log('Deadline past: ', !(deadline >= block.number));
         if (deadline >= block.number) {
             return ProposalState.Active;
         }
@@ -162,7 +155,6 @@ contract OsVoting is ERC165, EIP712, IOsVoting {
         bytes memory data,
         string memory description
     ) public virtual override returns (uint256) {
-        console.log('Current block number: ', block.number);
         require(
             getVotes(tokenId, msg.sender, block.number - 1) >= proposalThreshold(),
             'OsVoting: proposer votes below proposal threshold'
@@ -175,7 +167,6 @@ contract OsVoting is ERC165, EIP712, IOsVoting {
 
         uint64 snapshot = block.number.toUint64() + votingDelay().toUint64();
         uint64 deadline = snapshot + votingPeriod().toUint64();
-        console.log('Block deadline of proposal: ', deadline);
 
         proposal.voteStart.setDeadline(snapshot);
         proposal.voteEnd.setDeadline(deadline);
