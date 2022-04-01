@@ -1,8 +1,14 @@
 # OpenSchool DAO
 
+<p align='center'>
+  Welcome to OpenSchool git repository. <br/><br/>
+  <img src='./assets/OPENSCHOOL.png' width='300'/> 
+</p>
+
 <details>
   <summary> Git flow </summary>
-  This is our [gitflow](FLOW.md)! 
+  This is our [git flow](FLOW.md)
+  <link/>
 </details>
 
 <details>
@@ -12,18 +18,6 @@ First install dependencies:
 
 ```shell
 yarn install
-```
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
 ```
 
 ### Compile
@@ -70,6 +64,18 @@ await governor.propose(
   [mintCalldata],
   “Proposal #1: Give grant to team”,
 );
+```
+
+### Hardhat Commands
+
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+node scripts/sample-script.js
+npx hardhat help
 ```
 
 </details>
