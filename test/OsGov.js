@@ -8,9 +8,10 @@ describe('OsGov', () => {
   let applicant
   let addrs
   let skillContract
-  let governorContract
+  let voteContract
   let timelockContract
   let proposalId
+  let calldata
 
   const ProposalState = {
     Pending: 0,
@@ -34,81 +35,83 @@ describe('OsGov', () => {
     })
 
     // Deploy Timelock Contract
-    const timelockDelay = 2
-    const timelockFactory = await ethers.getContractFactory('Timelock')
-    timelockContract = await timelockFactory.deploy(expectedContractAddress, timelockDelay)
-    await timelockContract.deployed()
+    // const timelockDelay = 2
+    // const timelockFactory = await ethers.getContractFactory('Timelock')
+    // timelockContract = await timelockFactory.deploy(expectedContractAddress, timelockDelay)
+    // await timelockContract.deployed()
 
     // Deploy OsSkill Contract
     const skillFactory = await ethers.getContractFactory('OsSkill')
-    skillContract = await skillFactory.deploy(
-      ['Solidity', 'Javascript', 'Typescript'],
-      ['https://i.imgur.com/HyyK9bq.png', 'https://i.imgur.com/DnvDSV1.png', 'https://i.imgur.com/PrBtG6g.png'],
-    )
+    skillContract = await skillFactory.deploy('https://metadata.io/file.json', 'SKILL')
 
     // Deploy OsGov Contract
-    const governorFactory = await ethers.getContractFactory('OsGov')
-    governorContract = await governorFactory.deploy(skillContract.address, timelockContract.address)
-    await governorContract.deployed()
+    const votingFactory = await ethers.getContractFactory('OsVoting')
+    voteContract = await votingFactory.deploy(skillContract.address, 'Skills Voting')
+    await voteContract.deployed()
+
+    // Add new skill
+    await skillContract.addSkill('Javascript', 'https://javascript.com/logo.jpg')
 
     // A minimum of 1 NFT is required by OsGov#proposalThreshold() to create a proposal
     // A quorum of 2 NFT is required by a proposal to be successful. See OsGov#quorum()
-    await skillContract.connect(owner).mintSkill(owner.address, 0)
-    await skillContract.connect(owner).mintSkill(proposer.address, 0)
-    await skillContract.connect(owner).mintSkill(voter1.address, 0)
-    await skillContract.connect(owner).mintSkill(voter2.address, 0)
+    await skillContract.connect(owner).mint(owner.address, 0, [])
+    await skillContract.connect(owner).delegate(0, owner.address)
+    await skillContract.connect(owner).mint(proposer.address, 0, [])
+    await skillContract.connect(proposer).delegate(0, proposer.address)
+    await skillContract.connect(owner).mint(voter1.address, 0, [])
+    await skillContract.connect(voter1).delegate(0, voter1.address)
+    await skillContract.connect(owner).mint(voter2.address, 0, [])
+    await skillContract.connect(voter2).delegate(0, voter2.address)
   })
 
   it('should create a new proposal', async () => {
-    calldata = skillContract.interface.encodeFunctionData('mintSkill', [applicant.address, 0])
-    txn = await governorContract
-      .connect(proposer)
-      ['propose(address[],uint256[],bytes[],string)']([skillContract.address], [0], [calldata], 'Issuance#1')
+    calldata = skillContract.interface.encodeFunctionData('mint', [applicant.address, 0, []])
+    txn = await voteContract.connect(proposer).propose(skillContract.address, 0, calldata, 'Issuance#1')
     const receipt = await txn.wait()
     proposalId = receipt.events[0].args.proposalId
-    expect((await governorContract.proposals(proposalId)).forVotes.toString()).to.eql('0')
+    expect((await voteContract.proposalVotes(proposalId)).forVotes.toString()).to.eql('0')
   })
+
   it('should be not possible to cast a vote before voting delay', async () => {
-    await expect(governorContract.connect(voter1).castVote(proposalId, 1)).to.be.revertedWith(
-      'Governor: vote not currently active',
+    await expect(voteContract.connect(voter1).castVote(proposalId, 1)).to.be.revertedWith(
+      'OsVoting: vote not currently active',
     )
   })
+
   it('proposal should be in correct state before and after voting delay period', async () => {
-    expect(await governorContract.state(proposalId)).to.eql(ProposalState.Pending)
-    // Mine 1 block of voting delay
+    expect(await voteContract.state(proposalId)).to.eql(ProposalState.Pending)
+    // Mine 1 block to reach voting delay
     await hre.ethers.provider.send('evm_mine')
-    expect(await governorContract.state(proposalId)).to.eql(ProposalState.Active)
+    expect(await voteContract.state(proposalId)).to.eql(ProposalState.Active)
   })
+
+  //CURRENT
   it('only NFT holders should be able to vote', async () => {
-    await governorContract.connect(notVoter).castVote(proposalId, 1)
-    expect((await governorContract.proposals(proposalId)).forVotes.toString()).to.eql('0')
+    await voteContract.connect(applicant).castVote(proposalId, 1)
+    expect((await voteContract.proposalVotes(proposalId)).forVotes.toString()).to.eql('0')
     for (voter of [owner, voter1, voter2]) {
-      await governorContract.connect(voter).castVote(proposalId, 1)
+      await voteContract.connect(voter).castVote(proposalId, 1)
     }
-    expect((await governorContract.proposals(proposalId)).forVotes.toString()).to.eql('3')
+    expect((await voteContract.proposalVotes(proposalId)).forVotes.toString()).to.eql('3')
   })
-  it('should not be possible to queue proposal before voting period ends', async () => {
-    await expect(governorContract['queue(uint256)'](proposalId)).to.be.revertedWith('Governor: proposal not successful')
-  })
+
   it('should be not possible to vote after voting period (9 blocks)', async () => {
     for (_ of Array(9)) {
       await hre.ethers.provider.send('evm_mine')
     }
-    await expect(governorContract.connect(voter1).castVote(proposalId, 1)).to.be.revertedWith(
-      'Governor: vote not currently active',
+    await expect(voteContract.connect(voter1).castVote(proposalId, 1)).to.be.revertedWith(
+      'OsVoting: vote not currently active',
     )
   })
-  it('should be possible to queue and execute proposal after voting period if quorum reached', async () => {
-    await skillContract.transferOwnership(timelockContract.address)
-    expect(await governorContract.state(proposalId)).to.eql(ProposalState.Succeeded)
-    await expect(governorContract['queue(uint256)'](proposalId)).to.not.be.revertedWith(
-      'Governor: proposal not successful',
-    )
-    expect(await governorContract.state(proposalId)).to.eql(ProposalState.Queued)
+
+  it('should execute the proposal after voting period if quorum reached', async () => {
+    await skillContract.connect(owner).transferOwnership(voteContract.address)
+
     await hre.ethers.provider.send('evm_mine')
-    await expect(governorContract['execute(uint256)'](proposalId)).to.not.be.revertedWith(
-      'Governor: proposal not successful',
-    )
-    expect(await governorContract.state(proposalId)).to.eql(ProposalState.Executed)
+    const descriptionHash = ethers.utils.id('Issuance#1')
+    await voteContract.execute(skillContract.address, calldata, descriptionHash)
+
+    expect(await voteContract.state(proposalId)).to.eql(ProposalState.Executed)
+    expect((await skillContract.balanceOf(applicant.address, 0)).toString()).to.eql('1')
   })
 })

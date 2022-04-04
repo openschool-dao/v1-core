@@ -24,7 +24,6 @@ import './libraries/Base64.sol';
 // standard function "uri" must be implemented
 // metadataURI must be implemented for opensea, compatibility
 // https://docs.opensea.io/docs/metadata-standards#metadata-structure
-// we may use openzeppelin's ERC1155Supply.sol to count votes.
 
 contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
     string public symbol;
@@ -35,8 +34,8 @@ contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
     }
     Skill[] private _skills;
 
-    constructor(string memory uri) ERC1155(uri) EIP712('OpenSchool Skills', '1') {
-        symbol = 'SKILL';
+    constructor(string memory uri, string memory _symbol) ERC1155(uri) EIP712('OpenSchool Skills', '1') {
+        symbol = _symbol;
     }
 
     function skills() external view returns (Skill[] memory) {
@@ -61,7 +60,7 @@ contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
     }
 
     function burn(address from, uint256 id) external {
-        require(msg.sender == from, 'OsSkill: caller is not owner of this id');
+        require(msg.sender == from, 'OsSkill: caller not owner of this token');
 
         _burn(from, id, 1);
 
@@ -79,7 +78,7 @@ contract OsSkill is ERC1155, Ownable, EIP712, ERC1155Votes {
                         skill.name,
                         '#',
                         Strings.toString(tokenId),
-                        '", "description": "This NFT certifies his owner master this skill", "image": "',
+                        '", "description": "This token certifies his owner masters this skill", "image": "',
                         skill.imageURI,
                         '"}'
                     )
