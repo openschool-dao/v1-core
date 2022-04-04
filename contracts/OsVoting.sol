@@ -59,7 +59,7 @@ contract OsVoting is ERC165, EIP712, IOsVoting {
     }
 
     function quorum(uint256 blockNumber) public pure override returns (uint256) {
-        return 1;
+        return 3;
     }
 
     function votingDelay() public pure override returns (uint256) {
@@ -67,7 +67,7 @@ contract OsVoting is ERC165, EIP712, IOsVoting {
     }
 
     function votingPeriod() public pure override returns (uint256) {
-        return 3; // 1 week
+        return 5; // 1 week
     }
 
     function hasVoted(uint256 proposalId, address account) public view virtual override returns (bool) {
