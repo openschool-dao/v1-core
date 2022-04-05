@@ -29,6 +29,7 @@
     "axios": "^0.26.1",
     "dotenv": "^14.2.0",
     "eth-hooks": "^4.0.45",
+    "react": "^18.0.0-rc.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0"
   },

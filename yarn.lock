@@ -3016,6 +3016,7 @@ __metadata:
     pinst: ^2.1.6
     prettier: ^2.5.1
     prettier-plugin-solidity: ^1.0.0-beta.19
+    react: rc
     react-dom: ^18.0.0
     react-router-dom: ^6.3.0
     solhint: ^3.3.6
@@ -17636,6 +17637,15 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  languageName: node
+  linkType: hard
+
+"react@npm:rc":
+  version: 18.0.0-rc.3
+  resolution: "react@npm:18.0.0-rc.3"
+  dependencies:
+    loose-envify: ^1.1.0
+  checksum: 7645007183bd98f28a5f21abccde54b180263d9bc2be204c1d7d623597f4be31fdf414ed3fa8e1e3ac4eba47858b33c94cacc3635ee4a0f1d6de1aa5b026fae3
   languageName: node
   linkType: hard
 
