@@ -17640,15 +17640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:rc":
-  version: 18.0.0-rc.3
-  resolution: "react@npm:18.0.0-rc.3"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: 7645007183bd98f28a5f21abccde54b180263d9bc2be204c1d7d623597f4be31fdf414ed3fa8e1e3ac4eba47858b33c94cacc3635ee4a0f1d6de1aa5b026fae3
-  languageName: node
-  linkType: hard
-
 "read-pkg-up@npm:^1.0.1":
   version: 1.0.1
   resolution: "read-pkg-up@npm:1.0.1"
