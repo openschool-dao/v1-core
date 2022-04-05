@@ -26,7 +26,11 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.4.2",
-    "dotenv": "^14.2.0"
+    "axios": "^0.26.1",
+    "dotenv": "^14.2.0",
+    "eth-hooks": "^4.0.45",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "engines": {
     "node": ">=16.0.0"
