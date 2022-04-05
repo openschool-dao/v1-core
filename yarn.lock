@@ -2988,10 +2988,14 @@ __metadata:
     "@testing-library/jest-dom": ^5.16.2
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^13.5.0
-    react: ^17.0.2
-    react-dom: ^17.0.2
+    eth-hooks: ^4.0.45
+    ethers: ^5.6.2
+    react: ^18.0.0-rc.0
+    react-dom: ^18.0.0
+    react-router-dom: ^6.3.0
     react-scripts: 5.0.0
     web-vitals: ^2.1.4
+    web3modal: ^1.9.5
   languageName: unknown
   linkType: soft
 
@@ -3003,10 +3007,8 @@ __metadata:
     "@nomiclabs/hardhat-ethers": ^2.0.4
     "@nomiclabs/hardhat-waffle": ^2.0.1
     "@openzeppelin/contracts": ^4.4.2
-    axios: ^0.26.1
     chai: ^4.3.4
     dotenv: ^14.2.0
-    eth-hooks: ^4.0.45
     ethereum-waffle: ^3.4.0
     ethers: ^5.5.3
     hardhat: ^2.8.2
@@ -3016,9 +3018,6 @@ __metadata:
     pinst: ^2.1.6
     prettier: ^2.5.1
     prettier-plugin-solidity: ^1.0.0-beta.19
-    react: rc
-    react-dom: ^18.0.0
-    react-router-dom: ^6.3.0
     solhint: ^3.3.6
     solhint-plugin-prettier: ^0.0.5
   languageName: unknown
@@ -5251,15 +5250,6 @@ __metadata:
   dependencies:
     follow-redirects: ^1.14.7
   checksum: 2a8a3787c05f2a0c9c3878f49782357e2a9f38945b93018fb0c4fd788171c43dceefbb577988628e09fea53952744d1ecebde234b561f1e703aa43e0a598a3ad
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.26.1":
-  version: 0.26.1
-  resolution: "axios@npm:0.26.1"
-  dependencies:
-    follow-redirects: ^1.14.8
-  checksum: d9eb58ff4bc0b36a04783fc9ff760e9245c829a5a1052ee7ca6013410d427036b1d10d04e7380c02f3508c5eaf3485b1ae67bd2adbfec3683704745c8d7a6e1a
   languageName: node
   linkType: hard
 
@@ -9969,7 +9959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:^5.5.4":
+"ethers@npm:^5.5.4, ethers@npm:^5.6.2":
   version: 5.6.2
   resolution: "ethers@npm:5.6.2"
   dependencies:
@@ -10603,7 +10593,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.7, follow-redirects@npm:^1.14.8":
+"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.14.7":
   version: 1.14.9
   resolution: "follow-redirects@npm:1.14.9"
   peerDependenciesMeta:
@@ -17457,19 +17447,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react-dom@npm:17.0.2"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-    scheduler: ^0.20.2
-  peerDependencies:
-    react: 17.0.2
-  checksum: 1c1eaa3bca7c7228d24b70932e3d7c99e70d1d04e13bb0843bbf321582bc25d7961d6b8a6978a58a598af2af496d1cedcfb1bf65f6b0960a0a8161cb8dab743c
-  languageName: node
-  linkType: hard
-
 "react-dom@npm:^18.0.0":
   version: 18.0.0
   resolution: "react-dom@npm:18.0.0"
@@ -17630,13 +17607,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:^18.0.0-rc.0":
+  version: 18.0.0
+  resolution: "react@npm:18.0.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  checksum: 293020b96536b3c7113ee57ca5c990a3f25649d1751b1c7a3aabd16dff0691fe9f1eed1206616d0906d05933536052037340a0c8d0941ff870b0eb469a2f975b
   languageName: node
   linkType: hard
 
@@ -18439,16 +18415,6 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: 73e185a59e2ff5aa3609f5b9cb97ddd376f89e1610579d29939d952411ca6eb7a24907a4ea4556569dacb931467a1a4a56d94fe809ef713aa76748642cd96a6c
-  languageName: node
-  linkType: hard
-
-"scheduler@npm:^0.20.2":
-  version: 0.20.2
-  resolution: "scheduler@npm:0.20.2"
-  dependencies:
-    loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: c4b35cf967c8f0d3e65753252d0f260271f81a81e427241295c5a7b783abf4ea9e905f22f815ab66676f5313be0a25f47be582254db8f9241b259213e999b8fc
   languageName: node
   linkType: hard
 
