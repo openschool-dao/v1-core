@@ -47,7 +47,6 @@
     "prettier:check": "prettier --check --config ./.prettierrc.yaml \"**/*.{js,json,md,sol,ts}\"",
     "postinstall": "husky install",
     "test": "hardhat test",
-    "react:install": "yarn workspace @openschool-dao/react-app install",
     "react:start": "yarn workspace @openschool-dao/react-app start",
     "react:build": "yarn workspace @openschool-dao/react-app build",
     "react:test": "yarn workspace @openschool-dao/react-app test",
