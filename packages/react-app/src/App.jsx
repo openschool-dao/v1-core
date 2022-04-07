@@ -7,11 +7,10 @@ import { Tooltip } from "@chakra-ui/react";
 import { networkParams } from "./utils/networks";
 import { connectors } from "./utils/connectors";
 import { toHex, truncateAddress } from "./utils/utils";
-import { stripZeros } from "ethers/lib/utils";
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { library, chainId, account, activate, deactivate, active } = useWeb3React();
+  const { library, chainId, account, activate, /*deactivate,*/ active } = useWeb3React();
   const [error, setError] = useState("");
   const [network, setNetwork] = useState(undefined);
 
@@ -40,19 +39,20 @@ export default function Home() {
     }
   };
 
-  const refreshState = () => {
-    window.localStorage.setItem("provider", undefined);
-    setNetwork("");
-  };
+  // const refreshState = () => {
+  //   window.localStorage.setItem("provider", undefined);
+  //   setNetwork("");
+  // };
 
-  const disconnect = () => {
-    refreshState();
-    deactivate();
-  };
+  // const disconnect = () => {
+  //   refreshState();
+  //   deactivate();
+  // };
 
   useEffect(() => {
     const provider = window.localStorage.getItem("provider");
     if (provider) activate(connectors[provider]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
