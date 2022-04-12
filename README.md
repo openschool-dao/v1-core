@@ -7,7 +7,8 @@
 
 <details>
   <summary> Git flow </summary>
-  This is our [git flow](FLOW.md)
+  
+This is our [git flow](FLOW.md)
 </details>
 
 <details>

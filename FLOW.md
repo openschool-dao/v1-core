@@ -23,9 +23,9 @@ Each issue need to have a corresponding own branch, **with issue number**, meani
 
 Exemples:
 
-- For issue `1` named `Create statistics dashboard` : `f/#1-statistics-dashboard`
-- Or issue `42` named `Edit logo on landing page` : `e/#42-change-logo-landing-page`
-- For exemple a proper branch name: `f/#1-init-docker-architecture`
+- For issue `1` named `Create statistics dashboard` : `f/1-statistics-dashboard`
+- Or issue `42` named `Edit logo on landing page` : `e/42-change-logo-landing-page`
+- For exemple a proper branch name: `f/1-init-docker-architecture`
 
 ## 3. Commits
 
