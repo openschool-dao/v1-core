@@ -3,13 +3,13 @@ import Nav from './Nav'
 
 const Header = () => {
   return (
-    <header className="flex justify-between bg-gray-100 shadow-xl p-6 fixed w-full">
-      <p className="cursor-pointer text-xl font-bold mt-2">LOGO</p>
-      <div className="flex mr-6">
+    <header className="flex justify-between bg-gray-200 shadow-xl p-6 fixed w-full">
+      <div className="flex">
         <Nav label={'Votes'} />
         <Nav label={'Skills'} />
-        <WalletButton />
       </div>
+      <span className="cursor-pointer text-2xl md:text-3xl lg:text-4xl font-bold logo">LOGO</span>
+      <WalletButton />
     </header>
   )
 }
