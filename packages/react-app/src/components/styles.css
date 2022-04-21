@@ -17,7 +17,7 @@
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #43c6ac;
+  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 60%);
   transform-origin: bottom left;
   transition: transform 0.35s ease-in-out;
 }
@@ -27,7 +27,7 @@
 }
 
 .bg {
-  background-color: #191645;
+  background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 40%);
 }
 
 .shadow-color {

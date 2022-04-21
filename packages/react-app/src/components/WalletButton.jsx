@@ -33,9 +33,9 @@ const WalletButton = () => {
 
   return (
     <div className="flex items-center cursor-pointer">
-      <div onClick={connectToWallet} className="btn flex rounded-lg shadow-md p-2  animation">
-        <img className="w-7 mr-4" src="/metamask.svg" alt="" />
-        <button className="hidden md:block lg:block xl:text-base font">
+      <div onClick={connectToWallet} className="flex bg-gray-100 rounded-full md:rounded-lg shadow-md p-2 animation">
+        <img className="w-7 mr-4 ml-3 md:ml-0" src="/metamask.svg" alt="" />
+        <button className="hidden md:block lg:block xl:text-lg font-medium font">
           {rendered === '' && 'Connect Wallet'}
           {rendered !== '' && rendered}
         </button>
