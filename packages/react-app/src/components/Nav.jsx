@@ -1,14 +1,12 @@
-import React from "react";
-import "./header.css";
+import React from 'react'
+import './styles.css'
 
 const Nav = ({ label }) => {
   return (
     <div>
-      <span className="hover-underline-animation mr-6 cursor-pointer">
-        {label}
-      </span>
+      <span className="hover-underline-animation mr-6 cursor-pointer font-semibold font mt-2">{label}</span>
     </div>
-  );
-};
+  )
+}
 
-export default Nav;
+export default Nav

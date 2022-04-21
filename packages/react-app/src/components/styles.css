@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
+
+.font {
+  font-family: 'Akshar', sans-serif;
+}
+
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
+
+.hover-underline-animation:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #43c6ac;
+  transform-origin: bottom left;
+  transition: transform 0.35s ease-in-out;
+}
+
+.hover-underline-animation:hover:after {
+  transform: scaleX(1.2);
+}
+
+.bg {
+  background-color: #191645;
+}
+
+.shadow-color {
+  box-shadow: 1.5px 1.5px 1.5px #43c6ac;
+}
+
+.animation:hover {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}

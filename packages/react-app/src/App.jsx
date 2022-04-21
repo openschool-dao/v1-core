@@ -1,9 +1,9 @@
 // import { Contract } from "@ethersproject/contracts";
 // import { useCall } from "@usedapp/core";
 // import { addresses, abis } from "@my-app/contracts";
-import "./index.css";
-import Header from "./components/Header";
-import Home from "./pages/Home";
+import './index.css'
+import Header from './components/Header'
+import Home from './pages/Home'
 
 function App() {
   // Read more about useDapp on https://usedapp.io/
@@ -19,7 +19,7 @@ function App() {
       <Header />
       <Home />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
