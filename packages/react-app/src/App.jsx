@@ -1,8 +1,8 @@
 // import { Contract } from "@ethersproject/contracts";
 // import { useCall } from "@usedapp/core";
 // import { addresses, abis } from "@my-app/contracts";
+import Layout from './components/Layout'
 import './index.css'
-import Header from './components/Header'
 import Home from './pages/Home'
 
 function App() {
@@ -16,8 +16,9 @@ function App() {
 
   return (
     <>
-      <Header />
-      <Home />
+      <Layout>
+        <Home />
+      </Layout>
     </>
   )
 }
